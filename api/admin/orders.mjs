@@ -1,4 +1,0 @@
-import { requireAdmin, json, cors } from '../../lib/admin-auth.mjs';
-import { listOrders } from '../../lib/orders.mjs';
-const __handler=async req=>{if(req.method==='OPTIONS')return new Response('',{status:204,headers:cors(req)});try{requireAdmin(req);const url=new URL(req.url);const status=url.searchParams.get('status')||'current';const all=await listOrders();const current=new Set(['CASH_PENDING','PAID','PREPARING','READY']);const past=new Set(['COMPLETED','CANCELLED','REFUNDED']);const orders=status==='past'?all.filter(o=>past.has(o.status)):status==='all'?all:all.filter(o=>current.has(o.status));return json({orders},200,cors(req));}catch(e){return json({error:e.message==='Unauthorized'?'Unauthorized':e.message||'Unable to load orders.'},e.message==='Unauthorized'?401:500,cors(req));}};
-export default { fetch: __handler };
