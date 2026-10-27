@@ -1,0 +1,56 @@
+[build]
+  publish = "."
+
+[functions]
+  directory = "netlify/functions"
+
+[[redirects]]
+  from = "/online-menu"
+  to = "/online-menu/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/online-menu/"
+  to = "/online-menu/index.html"
+  status = 200
+
+
+[[redirects]]
+  from = "/home"
+  to = "/"
+  status = 200
+
+# GoodTable owner app: only expose this UI on the admin hostname.
+# The root index.html also contains a host guard so the admin hostname
+# cannot accidentally fall through to the customer homepage if routing
+# rules are changed or a deployment is served without conditions.
+# IMPORTANT: only rewrite the admin hostname's entry points.
+# Do not rewrite /admin/app.js or /admin/app.css to index.html, or the browser
+# will receive HTML instead of JavaScript/CSS and the owner workspace will hang.
+[[redirects]]
+  from = "/"
+  to = "/admin/index.html"
+  status = 200
+  force = true
+  conditions = {Host = ["admin.flamebachi.com"]}
+
+[[redirects]]
+  from = "/admin"
+  to = "/admin/index.html"
+  status = 200
+  force = true
+  conditions = {Host = ["admin.flamebachi.com"]}
+
+[[redirects]]
+  from = "/admin/"
+  to = "/admin/index.html"
+  status = 200
+  force = true
+  conditions = {Host = ["admin.flamebachi.com"]}
+
+[[redirects]]
+  from = "/admin/*"
+  to = "/"
+  status = 302
+  force = true
+  conditions = {Host = ["flamebachi.com", "www.flamebachi.com"]}

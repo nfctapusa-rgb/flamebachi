@@ -1,0 +1,7 @@
+netlify
+netlify.toml
+_redirects
+kitchen-bridge
+goodtable
+*.md
+.env*

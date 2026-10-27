@@ -1,0 +1,40 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "trailingSlash": false,
+  "redirects": [
+    { "source": "/", "has": [{ "type": "host", "value": "admin.flamebachi.com" }], "destination": "/admin/", "permanent": false },
+    { "source": "/", "has": [{ "type": "host", "value": "kitchen.flamebachi.com" }], "destination": "/kitchen/", "permanent": false },
+    { "source": "/admin/:path*", "has": [{ "type": "host", "value": "flamebachi.com" }], "destination": "/", "permanent": false },
+    { "source": "/admin/:path*", "has": [{ "type": "host", "value": "www.flamebachi.com" }], "destination": "/", "permanent": false }
+  ],
+  "rewrites": [
+    { "source": "/admin", "destination": "/admin/index.html" },
+    { "source": "/admin/", "destination": "/admin/index.html" },
+    { "source": "/kitchen", "destination": "/kitchen/index.html" },
+    { "source": "/kitchen/", "destination": "/kitchen/index.html" },
+    { "source": "/online-menu", "destination": "/online-menu/index.html" },
+    { "source": "/online-menu/", "destination": "/online-menu/index.html" },
+    { "source": "/home", "destination": "/index.html" }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)\\.(jpg|jpeg|png|svg|webp)",
+      "headers": [{ "key": "Cache-Control", "value": "public, max-age=604800, stale-while-revalidate=86400" }]
+    },
+    {
+      "source": "/(.*)\\.(css|js)",
+      "headers": [{ "key": "Cache-Control", "value": "public, max-age=3600, stale-while-revalidate=86400" }]
+    },
+    {
+      "source": "/(admin|kitchen)/(.*)",
+      "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }]
+    },
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "name":"flamebachi-kitchen-bridge",
+  "private":true,
+  "type":"module",
+  "scripts":{"start":"node bridge.mjs"}
+}

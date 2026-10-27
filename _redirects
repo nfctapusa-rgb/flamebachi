@@ -1,0 +1,8 @@
+# Owner dashboard is served only from the admin hostname.
+
+# Keep the public customer site from exposing /admin as a discoverable path.
+
+# Customer routes.
+/online-menu /online-menu/index.html 200
+/online-menu/ /online-menu/index.html 200
+/home / 200

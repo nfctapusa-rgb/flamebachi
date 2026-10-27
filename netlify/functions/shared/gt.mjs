@@ -1,0 +1,9 @@
+const url=process.env.SUPABASE_URL;
+const service=process.env.SUPABASE_SERVICE_ROLE_KEY;
+const anon=process.env.SUPABASE_ANON_KEY;
+export function json(body,status=200,headers={}){return new Response(JSON.stringify(body),{status,headers:{'content-type':'application/json','cache-control':'no-store',...headers}})}
+export async function supa(path,opts={}){const r=await fetch(`${url}/rest/v1/${path}`,{...opts,headers:{apikey:service,Authorization:`Bearer ${service}`,'content-type':'application/json',Prefer:'return=representation',...(opts.headers||{})}});const text=await r.text();let data;try{data=JSON.parse(text)}catch{data=text}if(!r.ok)throw new Error(typeof data==='string'?data:(data?.message||data?.hint||'Supabase request failed'));return data}
+export async function userFromRequest(req){const auth=req.headers.get('authorization')||'';if(!auth.startsWith('Bearer '))return null;const token=auth.slice(7);const r=await fetch(`${url}/auth/v1/user`,{headers:{apikey:anon,Authorization:`Bearer ${token}`}});if(!r.ok)return null;return r.json()}
+export async function membership(userId,restaurantId){const rows=await supa(`restaurant_members?select=role,restaurant_id&user_id=eq.${encodeURIComponent(userId)}&restaurant_id=eq.${encodeURIComponent(restaurantId)}&limit=1`);return rows[0]||null}
+export async function requireMember(req,roles=['owner','manager','cashier','kitchen']){const user=await userFromRequest(req);if(!user)throw Object.assign(new Error('Unauthorized'),{status:401});const restaurantId=process.env.GOODTABLE_DEFAULT_RESTAURANT_ID;if(!restaurantId)throw Object.assign(new Error('GOODTABLE_DEFAULT_RESTAURANT_ID is not configured'),{status:500});const m=await membership(user.id,restaurantId);if(!m||!roles.includes(m.role))throw Object.assign(new Error('Forbidden'),{status:403});return {user,restaurantId,role:m.role}}
+export function handleError(e){return json({error:e.message||'Server error'},e.status||500)}

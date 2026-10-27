@@ -1,0 +1,6 @@
+import { getStore } from '@netlify/blobs';
+import { requireAdmin, json, cors } from './shared/admin-auth.mjs';
+const store=()=>getStore({name:'flamebachi-settings',consistency:'strong'});
+const defaults={businessName:'Flamebachi',phone:'(213) 677-6942',googleRating:'4.9',googleReviewCount:'73+',website:'https://flamebachi.com',locations:[{name:'Downtown LA',address:'225 W 7th St, Los Angeles, CA 90014'}]};
+export default async req=>{if(req.method==='OPTIONS')return new Response('',{status:204,headers:cors(req)});try{requireAdmin(req);if(req.method==='GET'){const settings=await store().get('site',{type:'json'});return json({settings:{...defaults,...(settings||{})}},200,cors(req));}if(req.method==='PATCH'){const b=await req.json();const current=await store().get('site',{type:'json'});const next={...defaults,...(current||{}),...b,updatedAt:new Date().toISOString()};await store().setJSON('site',next);return json({settings:next},200,cors(req));}return json({error:'Method not allowed'},405,cors(req));}catch(e){return json({error:e.message==='Unauthorized'?'Unauthorized':e.message||'Unable to save settings.'},e.message==='Unauthorized'?401:500,cors(req));}};
+export const config={path:'/api/admin/settings'};
