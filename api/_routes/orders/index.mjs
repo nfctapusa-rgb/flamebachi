@@ -1,7 +1,7 @@
 import { randomUUID } from "node:crypto";
 import { saveOrder } from "../../_lib/orders.mjs";
 import { getStore } from '../../_lib/store.mjs';
-import { ITEMS, DRINKS, SAUCES, TAX_RATES, isDealLive } from "../../_lib/menu.mjs";
+import { ITEMS, DRINKS, SAUCES, TAX_RATES, isDealLive, kindOf } from "../../_lib/menu.mjs";
 import { saveCustomer } from "../../_lib/customers.mjs";
 
 const json=(body,status=200)=>new Response(JSON.stringify(body),{status,headers:{"content-type":"application/json","cache-control":"no-store"}});
@@ -27,6 +27,7 @@ const __handler=async (req,context)=>{
     let subtotalC=0, discountC=0;
     for(const raw of b.items){
       const item=activeItems.find(x=>x[0]===raw.category&&x[1]===raw.name&&x[5]!==false)||null;
+      const kind=item?kindOf(item[0]):null;
       if(!item) return json({error:`Unknown menu item: ${safeText(raw.name)}`},400);
       const qty=Math.max(1,Math.min(20,Number(raw.qty)||1));
       let drinkName="No drink", drinkPrice=0, sauceName="None", saucePrice=0, baseChoice="Standard", basePrice=0, substitutionPrice=0;
@@ -34,29 +35,32 @@ const __handler=async (req,context)=>{
       const specialInstructions=safeText(raw.specialInstructions,240);
       const substitutions=Array.isArray(raw.substitutions)?raw.substitutions.slice(0,4).map(a=>({name:safeText(a?.name,80),price:Number(a?.price)||0})):[];
 
-      if(["bowls","britos","plates","trios"].includes(item[0])){
+      if(["bowl","burrito","plate","trio"].includes(kind)){
         const baseMap={"Standard":0,"Fried Rice":0,"White Rice":0,"Garlic Noodles":3,"Half Fried Rice / Half Garlic Noodles":2};
         if(Object.prototype.hasOwnProperty.call(baseMap,String(raw.baseChoice||"Standard"))){baseChoice=String(raw.baseChoice||"Standard");basePrice=baseMap[baseChoice];}
         const d=DRINKS.find(x=>x[0]===raw.drink) || DRINKS[0];
         const s=SAUCES.find(x=>x[0]===raw.sauce) || SAUCES[0];
         drinkName=d[0]; drinkPrice=d[1]; sauceName=s[0]; saucePrice=s[1];
-        if(dealLive && item[0]==="bowls"){
-          if(["Coke","Sprite","Bottled Water"].includes(drinkName)){ discountC += cents(drinkPrice)*qty; drinkPrice=0; }
-          else if(drinkName.includes("Agua Fresca")){ discountC += Math.round(cents(drinkPrice)*0.5)*qty; drinkPrice=drinkPrice*0.5; }
+        if(dealLive && kind==="bowl"){
+          discountC += Math.round(cents(item[2])*0.10)*qty; // 10% off Bachi Bowls until 4 PM (matches menu banner)
+          // Drink stays in the subtotal; the deal amount is recorded once in discountC.
+          if(["Coke","Sprite","Water Bottle"].includes(drinkName)){ discountC += cents(drinkPrice)*qty; }
+          else if(drinkName.includes("Agua Fresca")){ discountC += Math.round(cents(drinkPrice)*0.5)*qty; }
         }
-      } else if(item[0]==="drinks"){
-        const d=DRINKS.find(x=>x[0]===raw.drink) || null;
-        if(d && d[0]!=="No drink"){ drinkName=d[0]; drinkPrice=d[1]; }
-        else { drinkName=item[1]; drinkPrice=item[2]; }
+      } else if(kind==="drink"){
+        drinkName=item[1]; drinkPrice=0;
+      } else if(kind==="side"){
+        const s=SAUCES.find(x=>x[0]===raw.sauce) || SAUCES[0];
+        sauceName=s[0]; saucePrice=s[1];
       } else if(item[0]==="sauces"){
-        sauceName=item[1]; saucePrice=item[2];
+        sauceName=item[1]; saucePrice=0; // price already in item[2]
       }
       const allowedSubstitutions={
-        "Half Fried Rice / Half Garlic Noodles": item[0]==="bowls"?2.5:2,
-        "Sub Garlic Noodles": item[0]==="plates"?4:item[0]==="bowls"?3.5:3,
-        "Sub Shrimp → Salmon": item[0]==="trios"?6:3,
-        "Sub Shrimp → Ahi Tuna": item[0]==="trios"?6:3,
-        "Sub Shrimp → Scallops": item[0]==="trios"?6:3,
+        "Half Fried Rice / Half Garlic Noodles": kind==="bowl"?2.5:2,
+        "Sub Garlic Noodles": kind==="plate"?4:kind==="bowl"?3.5:3,
+        "Sub Shrimp → Salmon": kind==="trio"?6:3,
+        "Sub Shrimp → Ahi Tuna": kind==="trio"?6:3,
+        "Sub Shrimp → Scallops": kind==="trio"?6:3,
         "Sub Any 2 Shrimp → Seafood":8
       };
       const safeSubstitutions=substitutions.filter(a=>Object.prototype.hasOwnProperty.call(allowedSubstitutions,a.name)).map(a=>({name:a.name,price:allowedSubstitutions[a.name]}));
