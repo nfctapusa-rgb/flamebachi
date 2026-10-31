@@ -75,3 +75,10 @@
   .menu-item.has-img .add-button{right:6px;bottom:20px}
 }
 @media (max-width:760px){.category-mobile-head{display:none}.categories,.categories.mobile-open{display:flex;padding:8px 14px}}
+/* View-only menu + ChowNow ordering */
+.topbar-inner{grid-template-columns:1fr auto}
+.order-now{text-decoration:none;padding:0 20px;font-size:14px}
+.pickup-locs{display:flex;gap:8px;flex-wrap:wrap}
+.pickup-locs a{display:inline-flex;align-items:center;height:36px;padding:0 14px;border-radius:18px;background:#111;color:#fff;font-size:13px;font-weight:700;text-decoration:none;white-space:nowrap}
+.pickup-locs a:hover{background:#333}
+@media (max-width:760px){.pickup-panel{flex-direction:column;align-items:flex-start;gap:10px}.pickup-panel p{display:block}.order-now{height:38px;padding:0 16px;font-size:13px}}

@@ -23,7 +23,7 @@
   <link rel="icon" href="assets/logo.svg">
   <link rel="preload" as="image" href="assets/menu-steak-lobster.jpg">
   <link rel="preconnect" href="https://api.localo.com" crossorigin>
-  <link rel="stylesheet" href="styles.css?v=20261029">
+  <link rel="stylesheet" href="styles.css?v=20261030">
   <script>
     fetch("https://api.localo.com/api/structured_data/gllgpk5OUf2ysSBRyzIB2VI2jAWjqOddXLVCCDI5TKo/local_business")
       .then(response => response.json())
@@ -46,7 +46,7 @@
       <a href="/online-menu/">View Menu</a>
       <a href="#locations">Locations</a>
       <a href="#social">Social</a>
-      <a class="order" href="https://order.chownow.com/order/28837/locations" target="_blank" rel="noopener">Order Now</a>
+      <a class="order" href="https://order.chownow.com/order/28837/locations" data-order target="_blank" rel="noopener">Order Now</a>
     </nav>
   </div>
 </header>
@@ -60,7 +60,7 @@
       <h1>Good Frequency Energy.<br>Fresh off the grill.</h1>
       <p>Flamebachi brings flame-grilled steak, chicken, seafood, bowls, plates and Burritos to Los Angeles and beyond.</p>
       <div class="ctas">
-        <a class="btn btn-light" href="https://order.chownow.com/order/28837/locations" target="_blank" rel="noopener">Order Online</a>
+        <a class="btn btn-light" href="https://order.chownow.com/order/28837/locations" data-order target="_blank" rel="noopener">Order Online</a>
         <a class="btn btn-outline" href="/online-menu/">View the Menu</a>
       </div>
     </div>
@@ -73,7 +73,7 @@
         <h2>10% OFF ALL BACHI BOWLS<br><span>+ FREE SODA</span></h2>
         <p>OR get <strong>50% OFF any Agua Fresca.</strong></p>
       </div>
-      <a class="btn btn-light" href="https://order.chownow.com/order/28837/locations" target="_blank" rel="noopener">Order Before 4 PM</a>
+      <a class="btn btn-light" href="https://order.chownow.com/order/28837/locations" data-order target="_blank" rel="noopener">Order Before 4 PM</a>
     </div>
   </section>
 
@@ -143,7 +143,7 @@
       </div>
 
       <div class="center-cta">
-        <a class="btn btn-dark" href="https://order.chownow.com/order/28837/locations" target="_blank" rel="noopener">Order Flamebachi</a>
+        <a class="btn btn-dark" href="https://order.chownow.com/order/28837/locations" data-order target="_blank" rel="noopener">Order Flamebachi</a>
       </div>
     </div>
   </section>
@@ -213,10 +213,11 @@
       <a href="/online-menu/">View Menu</a>
       <a href="#locations">Locations</a>
       <a href="#social">Social</a>
-      <a href="https://order.chownow.com/order/28837/locations" target="_blank" rel="noopener">Order Online</a>
+      <a href="https://order.chownow.com/order/28837/locations" data-order target="_blank" rel="noopener">Order Online</a>
     </div>
   </div>
 </footer>
 
+<script src="/order-picker.js?v=20261030" defer></script>
 </body>
 </html>

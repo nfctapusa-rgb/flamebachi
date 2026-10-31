@@ -3,17 +3,15 @@
 <head>
 <meta charset="utf-8"><base href="/online-menu/"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Flamebachi | Menu & Pickup</title>
-<meta name="description" content="View the Flamebachi menu and place a pickup order. Fresh hibachi bowls, plates, seafood, Burritos, sides, sauces and drinks.">
-<link rel="icon" href="assets/logo.svg"><link rel="stylesheet" href="app.css?v=20261029">
-<link rel="preconnect" href="https://js.stripe.com">
-<script src="https://js.stripe.com/v3/" async></script>
+<meta name="description" content="View the Flamebachi menu and place a pickup order. Fresh hibachi bowls, plates, seafood, burritos, sides, sauces and drinks. Order pickup or delivery on ChowNow.">
+<link rel="icon" href="assets/logo.svg"><link rel="stylesheet" href="app.css?v=20261030">
+
 </head>
 <body>
 <header class="topbar">
   <div class="topbar-inner">
     <a href="#top" class="brand"><img src="assets/flamebachi-wordmark.png" alt="Flamebachi"></a>
-    <div class="pickup-status"><span class="dot"></span><span>Pickup only</span><select id="locationSelect" aria-label="Pickup location"><option>Downtown LA</option><option>Jurupa Valley</option></select></div>
-    <button class="cart-button" id="cartButton"><span>Order</span><strong id="cartCount">0</strong><span class="cart-total" id="cartTotal">$0.00</span></button>
+    <a class="cart-button order-now" href="https://order.chownow.com/order/28837/locations" data-order target="_blank" rel="noopener">Order Now</a>
   </div>
 </header>
 
@@ -30,82 +28,15 @@
 
 
 <section class="pickup-panel" id="pickup">
-  <div><span class="eyebrow">Order online</span><h2>Pickup, your way.</h2><p>Select your location above. Add food to your order. Online payments are temporarily unavailable.</p></div>
-  <div class="pickup-meta"><span>Pickup only</span><span id="pickupLocationLabel">Downtown LA</span></div>
+  <div><span class="eyebrow">Order online</span><h2>Pickup or delivery on ChowNow</h2><p>Browse the full menu here, then order from your nearest Flamebachi.</p></div>
+  <div class="pickup-locs"><a href="https://order.chownow.com/order/28837/locations/61131" target="_blank" rel="noopener">Downtown LA</a><a href="https://order.chownow.com/order/28837/locations/42682" target="_blank" rel="noopener">Jurupa Valley</a></div>
 </section>
 
 <section class="menu" id="menu"></section>
 </main>
 
-<div class="cart-drawer" id="cartDrawer" aria-hidden="true">
-  <div class="drawer-backdrop" id="drawerBackdrop"></div>
-  <aside class="drawer" aria-label="Your order">
-    <div class="drawer-head"><div><span class="eyebrow">Your order</span><h2>Pickup cart</h2></div><button class="icon-button" id="closeCart">×</button></div>
-    <div class="drawer-location"><span>Pickup at</span><strong id="drawerLocation">Downtown LA</strong></div>
-    <div class="cart-items" id="cartItems"></div>
-    <div class="cart-empty" id="cartEmpty"><div class="empty-mark">+</div><h3>Your order is empty</h3><p>Add something from the menu to get started.</p></div>
-    <div class="cart-summary" id="cartSummary"></div>
-    <div class="cart-payment-note"><strong>Card payments unavailable</strong><span>Pay cash when you pick up.</span></div>
-    <a class="cart-review-link" href="https://www.google.com/maps/search/?api=1&query=Flamebachi%20225%20W%207th%20St%20Los%20Angeles%20CA%2090014" target="_blank" rel="noopener">★★★★★ Leave us a Google review</a>
-    <button class="checkout-button" id="checkoutButton">Pay cash & place order</button>
-  </aside>
-</div>
-
-<div class="sheet" id="itemSheet" aria-hidden="true">
-  <div class="sheet-backdrop" data-close-sheet></div>
-  <div class="sheet-card">
-    <div class="sheet-head"><div><span class="eyebrow" id="sheetCategory">Customize</span><h2 id="sheetTitle">Item</h2><p id="sheetDescription"></p></div><button class="icon-button" data-close-sheet>×</button></div>
-    <div id="sheetBody"></div>
-    <div class="sheet-footer"><div><span>Item total</span><strong id="sheetPrice">$0.00</strong></div><button class="primary-button" id="addToCart">Add to order</button></div>
-  </div>
-</div>
-
-<div class="checkout-modal" id="checkoutModal" aria-hidden="true">
-  <div class="modal-backdrop" data-close-checkout></div>
-  <div class="checkout-card">
-    <div class="checkout-head"><div><span class="eyebrow">Pickup checkout</span><h2>Almost there.</h2><p>Pay cash when you arrive. Card payments are temporarily unavailable.</p></div><button class="icon-button" data-close-checkout>×</button></div>
-    <form id="checkoutForm">
-      <label>First & last name<input id="customerName" name="name" autocomplete="name" required placeholder="Your name"></label>
-      <label>Phone number<input id="customerPhone" name="phone" autocomplete="tel" inputmode="tel" required placeholder="(213) 555-0123"></label>
-      <div class="checkout-location"><span>Pickup location</span><strong id="checkoutLocation">Downtown LA</strong></div>
-      <div id="checkoutSummary"></div>
-      <div class="cash-payment-box"><strong>Cash at pickup</strong><span>Your order number will be generated after you place the order.</span></div><button class="primary-button full" type="submit">Place cash order</button>
-    </form>
-  </div>
-</div>
-
-<div class="payment-modal" id="paymentModal" aria-hidden="true">
-  <div class="modal-backdrop"></div>
-  <div class="payment-card">
-    <div class="finix-badge">SECURE PAYMENT</div>
-    <span class="eyebrow">Secure payment</span><h2>Pay for pickup.</h2><p>Your card stays on this page. Payment is securely processed by Stripe.</p>
-    <div class="pay-total"><span>Order total</span><strong id="paymentTotal">$0.00</strong></div>
-    <form id="paymentForm">
-      <div id="expressCheckoutWrap" class="express-checkout-wrap" hidden>
-        <div class="wallet-label">Fast checkout</div>
-        <div id="expressCheckoutElement" class="express-checkout-element"></div>
-        <div class="wallet-divider"><span>or pay with card</span></div>
-      </div>
-      <div id="paymentElement" class="stripe-payment-element"></div>
-      <div id="paymentError" class="payment-error" role="alert"></div>
-      <button class="primary-button full" id="payNowButton" type="submit">Pay now</button>
-    </form>
-  </div>
-</div>
-
-<div class="success-modal" id="successModal" aria-hidden="true">
-  <div class="modal-backdrop"></div>
-  <div class="success-card">
-    <div class="success-mark">✓</div><span class="eyebrow">Payment complete</span><h2>Order confirmed.</h2>
-    <div class="order-number" id="orderNumber">FLM-0000</div>
-    <p id="successText">Your pickup order is confirmed.</p>
-    <div class="receipt-card"><div><span>Customer</span><strong id="receiptName"></strong></div><div><span>Pickup</span><strong id="receiptLocation"></strong></div><div><span>Total</span><strong id="receiptTotal"></strong></div></div>
-    <div class="receipt-question"><h3>Receipt</h3><p>Want a copy of your receipt? Choose email or text.</p><div class="receipt-choice"><button class="secondary-button receipt-choice-button active" data-receipt-method="email" type="button">Email</button><button class="secondary-button receipt-choice-button" data-receipt-method="text" type="button">Text</button></div><div class="receipt-actions"><input id="receiptContact" type="email" autocomplete="email" placeholder="Email address"><button class="primary-button" id="sendReceipt" type="button">Send receipt</button></div><div class="receipt-note" id="receiptNote"></div></div>
-    <button class="primary-button full" id="doneButton">Done</button>
-  </div>
-</div>
-
 <div class="toast" id="toast"></div>
-<script src="app.js?v=20261029"></script>
+<script src="/order-picker.js?v=20261030"></script>
+<script src="app.js?v=20261030"></script>
 </body>
 </html>
