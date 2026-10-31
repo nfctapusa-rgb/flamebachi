@@ -14,3 +14,4 @@ footer{background:#111;color:#aaa;padding:32px 0 90px}.footer-row{display:flex;j
 @media(max-width:560px){section{padding:64px 0}.nav{min-height:68px}.logo img{width:160px}.hero-photo{background-position:58% center}.hero h1{font-size:clamp(3rem,16vw,4.5rem)}.food-grid{grid-template-columns:1fr}.food-card-large{grid-column:span 1}.food-card-large img,.food-card img{aspect-ratio:4/4.5}.google-review{padding:18px 0}.google-review-inner{gap:12px}.google-mark{width:38px;height:38px;flex:0 0 38px}.google-review-stars{font-size:.9rem}.google-review-title{font-size:.95rem}.google-review-meta{font-size:.75rem}.google-review-link{font-size:.82rem}.footer-row{display:grid}.footer-brand{align-items:flex-start}}
 
 
+.hours{list-style:none;padding:0;margin:14px 0 16px;border-top:1px solid #333}.hours li{display:flex;justify-content:space-between;gap:16px;padding:7px 0;border-bottom:1px solid #2a2a2a;color:#ccc;font-size:.95rem}.hours li span:first-child{color:#999}
