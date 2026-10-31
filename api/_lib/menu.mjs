@@ -46,7 +46,7 @@ export const ITEMS = [
   ["drinks", "Water Bottle", 2, "", ""],
   ["drinks", "Strawberry Jamaica Agua Fresca", 6.5, "House-made strawberry jamaica agua fresca.", "thumbs/menu-aguas-frescas.jpg"],
   ["drinks", "Pineapple Cucumber Agua Fresca", 6.5, "House-made pineapple cucumber agua fresca.", ""],
-  ["drinks", "Peaches & Cream Agua Fresca", 6.5, "House-made peaches & cream agua fresca.", ""],
+  ["drinks", "Peaches & Cream Agua Fresca", 6.5, "House-made peaches & cream agua fresca.", "thumbs/menu-aguas-frescas.jpg"],
   ["drinks", "1/2 Strawberry Jamaica 1/2 Pineapple Cucumber", 6.5, "Half & half agua fresca.", ""],
   ["drinks", "1/2 Peaches & Cream 1/2 Strawberry Jamaica", 6.5, "Half & half agua fresca.", ""],
   ["drinks", "1/2 Pineapple Cucumber 1/2 Peaches & Cream", 6.5, "Half & half agua fresca.", ""],
